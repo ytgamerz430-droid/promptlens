@@ -1,0 +1,20 @@
+# Render Blueprint — PromptLens clone (free tier).
+# Dashboard fallback: New -> Blueprint -> pick the repo containing this file.
+# The API-driven deploy sets the same values; this file documents them.
+services:
+  - type: web
+    name: promptlens
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DEFAULT_PROVIDER
+        value: mock
+# NOTE: the free tier has no persistent disk, so /data (SQLite + uploads)
+# is ephemeral and resets on restarts/redeploys. Paid tiers can add a disk.

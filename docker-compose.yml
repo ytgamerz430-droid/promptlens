@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    image: promptlens:latest
+    ports:
+      - "4000:4000"
+    # Secrets / config live in apps/api/.env (copy from ../.env.example first).
+    # SESSION_SECRET is required; provider keys and SMTP/OAuth are optional.
+    env_file:
+      - apps/api/.env
+    environment:
+      DATABASE_PATH: /data/app.db
+      UPLOAD_DIR: /data/uploads
+      WEB_URL: ${WEB_URL:-http://localhost:4000}
+    volumes:
+      # Persist SQLite + uploads across restarts/redeploys.
+      - promptlens-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  promptlens-data:

@@ -1,0 +1,11 @@
+node_modules
+apps/api/node_modules
+apps/web/node_modules
+apps/api/data
+apps/web/dist
+.env
+apps/api/.env
+.git
+.gitignore
+docs
+tmp
